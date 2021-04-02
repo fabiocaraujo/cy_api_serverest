@@ -1,0 +1,27 @@
+{
+  "name": "cy_api_lab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabiocaraujo/cy_api_lab.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fabiocaraujo/cy_api_lab/issues"
+  },
+  "homepage": "https://github.com/fabiocaraujo/cy_api_lab#readme",
+  "dependencies": {
+    "cypress": "^6.8.0",
+    "cypress-tags": "^0.0.21",
+    "faker": "^5.5.2",
+    "joi": "^17.4.0",
+    "mocha": "^7.1.1",
+    "mochawesome": "^6.0.0"
+  }
+}
