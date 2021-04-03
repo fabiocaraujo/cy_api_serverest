@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cy:open": "npx cypress open",
+    "cy:run": "npx cypress run"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
     "joi": "^17.4.0",
     "mocha": "^7.1.1",
     "mochawesome": "^6.0.0"
+  },
+  "devDependencies": {
+    "@shelex/cypress-allure-plugin": "^2.4.0"
   }
 }

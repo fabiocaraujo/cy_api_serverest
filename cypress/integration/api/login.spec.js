@@ -2,12 +2,16 @@
 import loginSchema from '../../contracts/login.contract'
 
 describe('Deve fazer o Login - POST - @healthcheck', () => {
+
+before(() => {
+        cy.cadastroUsuarioMaster()
+});
     it('Login POST com Payload', () => {
         cy.request({
             method: 'POST',
             url: '/login',
             body: {
-                "email": "fulano@qa.com",
+                "email": "fabio@teste.com",
                 "password": "teste"
             }
         })//.then(res => console.log(res.body.authorization))
@@ -21,13 +25,13 @@ describe('Deve fazer o Login - POST - @healthcheck', () => {
     });
 
     it('Login usando App functions', () => {
-        cy.login("fulano@qa.com", "teste").then((response) => {
+        cy.login("fabio@teste.com", "teste").then((response) => {
             console.log(response)
         })
     });
 
     it('Teste de contrato de Login', () => {
-        cy.login("fulano@qa.com", "teste")
+        cy.login("fabio@teste.com", "teste")
             .should((response) => {
                 return loginSchema.validateAsync(response.body)
             });

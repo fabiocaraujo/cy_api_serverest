@@ -1,4 +1,5 @@
 import login from '../fixtures/login.json'
+var faker = require('faker');
 
 Cypress.Commands.add('login', (usuario, senha) => {
     cy.request({
@@ -21,7 +22,38 @@ Cypress.Commands.add('token', () => {
         }
     }).then((response) => {
         return response.body.authorization
-    }).then((log) =>{
-        log= cy.log('Logado com ' + login.email)
+    }).then((log) => {
+        log = cy.log('Logado com ' + login.email)
     })
 })
+
+Cypress.Commands.add('getUsuario', () => {
+    cy.request({
+        method: 'GET',
+        url: '/usuarios',
+    }).then((response) => {
+        return response.body.usuarios
+    })
+})
+
+//cria usuários faker
+var nomeFake = faker.name.findName()
+var emailFake = faker.internet.email(nomeFake)
+var senhaFake = faker.internet.password()
+
+Cypress.Commands.add('cadastroUsuarioMaster', () => {
+    cy.request({
+        method: 'POST',
+        url: '/usuarios',
+        body: {
+            nome: nomeFake,
+            email: emailFake,
+            password: senhaFake,
+            administrador: "true"
+        }
+    }).should((response) => {
+        expect(response.status).to.eq(201)
+    })
+})
+
+

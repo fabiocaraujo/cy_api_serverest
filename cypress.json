@@ -1,5 +1,9 @@
 {
     "baseUrl": "http://localhost:3000/",
+    "env": {
+        "dev": "http://localhost:3000/",
+        "prd" : "https://serverest.prd/"
+    }, 
     "reporter": "mochawesome",
     "reporterOptions": {
         "reportDir": "mochawesome-report/json",

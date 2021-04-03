@@ -1,13 +1,15 @@
 /// <reference types="cypress" />
 import usuarioSchema from '../../contracts/usuario.contract';
+
 var faker = require('faker');
+var nome = faker.name.findName()
+var email = faker.internet.email(nome)
 
-describe('Usuários', () => {
-
-    //cria usuários faker
-    var nome = faker.name.findName()
-    var email = faker.internet.email(nome)
-
+describe('Usuários - Testes da API ServeRest', () => {
+    
+    before(() => {
+        cy.cadastroUsuarioMaster()
+    });
     it('Deve validar o esquema do contrato - SCHEMA', () => {
         cy.request({
             url: '/usuarios',
@@ -17,7 +19,7 @@ describe('Usuários', () => {
         })
     });
 
-    it('Deve listar todos os usuários cadastrado - GET - @healthcheck', () => {
+    it('Deve listar todos os usuários cadastrado - GET', () => {
         cy.request({
             url: '/usuarios',
             method: 'GET'
@@ -31,7 +33,7 @@ describe('Usuários', () => {
         })
     });
 
-    it.only('Deve cadastrar usuário com sucesso - POST', () => {
+    it('Deve cadastrar usuário com sucesso - POST', () => {
         cy.request({
             method: 'POST',
             url: '/usuarios',
@@ -45,7 +47,7 @@ describe('Usuários', () => {
             cy.log(response.body)
             expect(response.status).to.eq(201)
             expect(response.body.message).to.eql("Cadastro realizado com sucesso")
-            expect(response.body).to.have.property("_id")
+            expect(response.body).to.have.property("_id")  
         })
     });
 

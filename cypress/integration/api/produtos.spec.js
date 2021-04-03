@@ -1,20 +1,25 @@
 /// <reference types="cypress" />
 import produtosSchema from '../../contracts/produtos.contract'
-var faker = require('faker/locale/pt_BR')
 
-//Gera dados Faker
-var produto = faker.commerce.product();
+var faker = require('faker/locale/pt_BR')
+var produto = faker.commerce.product() + ' - Modelo: ' + faker.random.alpha(9);
 var preco = faker.commerce.price();
 var descricao = faker.commerce.productDescription(produto);
-var quantidade = faker.random.number(999);
+var quantidade = faker.datatype.number(999)
 
 describe('Produtos', () => {
     let token
-    before(() => { 
-        cy.token()
-            .then(t => {
-                token = t
-            })
+    before(() => {
+        cy.token().then(t => { token = t })
+    });
+
+    it('Validar contrato de Produtos - SCHEMA', () => {
+        cy.request({
+            url: '/produtos',
+            method: 'GET'
+        }).should((response) => {
+            return produtosSchema.validateAsync(response.body)
+        });
     });
 
     it('Deve listar os produtos cadastrados - GET', () => {
@@ -24,20 +29,11 @@ describe('Produtos', () => {
         }).should((response) => {
             expect(response.status).to.eq(200)
             console.log(response)
-            expect(response.body.produtos[0].nome).contains("Logitech MX Vertical", "Mouse bom", 470);
+            //expect(response.body.produtos[0].nome).contains("Logitech MX Vertical", "Mouse bom", 470);
         })
     });
 
-    it('Validar contrato de Produtos - CONTRACT', () => {
-        cy.request({
-            url: '/produtos',
-            method: 'GET'
-        }).should((response) => {
-            return produtosSchema.validateAsync(response.body)
-        });
-    });
-
-    it('Deve inserir produto - POST', () => {
+    it('Deve inserir um produto novo - POST', () => {
         cy.request({
             url: '/produtos',
             method: 'POST',
@@ -55,27 +51,68 @@ describe('Produtos', () => {
         })
     });
 
-    it('POST - Deve validar mensagem de erro ao cadastrar produto repetido', () => {
-        cy.token()
-            .then(token => {
-                cy.request({
-                    url: '/produtos',
-                    method: 'POST',
-                    headers: { authorization: token },
-                    body:
-                    {
-                        nome: produto,
-                        preco: preco,
-                        descricao: descricao,
-                        quantidade: quantidade
-                    },
-                    failOnStatusCode: false // configuração para deixar o cypress entender o cenário de falha
-                }).should((response) => {
-                    expect(response.status).to.eq(400);
-                    console.log(response.body)
-                    expect(response.body.message).contains("Já existe produto com esse nome");
-                })
+    it('Deve validar mensagem de erro ao cadastrar produto repetido - POST', () => {
+        cy.request({
+            url: '/produtos',
+            method: 'POST',
+            headers: { authorization: token },
+            body:
+            {
+                nome: produto,
+                preco: preco,
+                descricao: descricao,
+                quantidade: quantidade
+            }, failOnStatusCode: false // configuração para deixar o cypress entender o cenário de falha
+        }).should((response) => {
+            expect(response.status).to.eq(400);
+            console.log(response.body)
+            expect(response.body.message).contains("Já existe produto com esse nome");
+        })
+    });
+
+    it('Deve alterar um produto cadastrado previamente - PUT', () => {
+        cy.request({
+            //url: '/produtos?nome=' + produto,
+            url: '/produtos',  
+            method: 'GET'
+        }).then(response => {
+            let id = response.body.produtos[2]._id
+            cy.log('ID produto: ' + id)
+            cy.request({
+                url: '/produtos/' + id,
+                method: 'PUT',
+                headers: { authorization: token },
+                body:
+                {
+                    nome: produto + '_v2',
+                    preco: preco,
+                    descricao: descricao,
+                    quantidade: quantidade
+                }
+            }).should((response) => {
+                expect(response.status).to.eq(200)
+                expect(response.body.message).to.eql("Registro alterado com sucesso")
             })
+        })
+    });
+
+    it('Deve deletar produtos cadastrado previamente - DELETE', () => {
+        cy.request({
+            url: '/produtos',
+            //url: '/produtos?nome=' + produto + '_v2',
+            method: 'GET',
+        }).then((response) => {
+            let id = response.body.produtos[2]._id
+            cy.log(id)
+            cy.request({
+                url: '/produtos/' + id,
+                method: 'DELETE',
+                headers: { authorization: token }
+            }).should((response) => {
+                expect(response.status).to.eq(200)
+                expect(response.body.message).to.eql("Registro excluído com sucesso")
+            })
+        })
     });
 
 });
