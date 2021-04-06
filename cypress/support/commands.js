@@ -1,3 +1,4 @@
+
 import login from '../fixtures/login.json'
 var faker = require('faker');
 
@@ -46,13 +47,11 @@ Cypress.Commands.add('cadastroUsuarioMaster', () => {
         method: 'POST',
         url: '/usuarios',
         body: {
-            nome: nomeFake,
-            email: emailFake,
-            password: senhaFake,
+            nome: login.nome,
+            email: login.email,
+            password: login.password,
             administrador: "true"
-        }
-    }).should((response) => {
-        expect(response.status).to.eq(201)
+        }, failOnStatusCode: false
     })
 })
 

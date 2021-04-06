@@ -18,7 +18,7 @@ before(() => {
             .should((response) => {
                 expect(response.status).to.eq(200)
                 expect(response.statusText).to.eq("OK")
-                expect(response.duration).to.be.lessThan(7)
+                expect(response.duration).to.be.lessThan(9)
                 expect(response.body.message).to.eq("Login realizado com sucesso")
                 cy.log(response.body.authorization)
             })
