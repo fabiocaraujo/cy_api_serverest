@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import loginSchema from '../../contracts/login.contract'
 
-describe('Deve fazer o Login - POST - @healthcheck', () => {
+describe('LOGIN - Testes da API ServeRest', () => {
 
 before(() => {
         cy.cadastroUsuarioMaster()

@@ -103,6 +103,11 @@ dist
 # TernJS port file
 .tern-port
 
-w_examples/
-
 videos/
+
+reports/
+
+mochawesome-report/
+
+screenshots/
+

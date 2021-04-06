@@ -1,14 +1,15 @@
 {
-    "baseUrl": "http://localhost:3000/",
-    "env": {
-        "dev": "http://localhost:3000/",
-        "prd" : "https://serverest.prd/"
-    }, 
-    "reporter": "mochawesome",
-    "reporterOptions": {
-        "reportDir": "mochawesome-report/json",
-        "overwrite": false,
-        "html": false,
-        "json": true
-    }
+  "baseUrl": "http://localhost:3000/",
+  "env": {
+    "dev": "http://localhost:3000/",
+    "prd": "https://serverest.prd/"
+  },
+  "reporter": "mochawesome",
+  "reporterOptions": {
+    "reportDir": "mochawesome-report",
+    "overwrite": false,
+    "html": false,
+    "json": true
+  },
+  "projectId": "7micw6"
 }

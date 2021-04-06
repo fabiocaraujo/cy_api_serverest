@@ -3,11 +3,12 @@ import produtosSchema from '../../contracts/produtos.contract'
 
 var faker = require('faker/locale/pt_BR')
 var produto = faker.commerce.product() + ' - Modelo: ' + faker.random.alpha(9);
+var produto2 = faker.commerce.product() + ' - Modelo: ' + faker.random.alpha(9);
 var preco = faker.commerce.price();
 var descricao = faker.commerce.productDescription(produto);
 var quantidade = faker.datatype.number(999)
 
-describe('Produtos', () => {
+describe('PRODUTOS - Testes da API ServeRest', () => {
     let token
     before(() => {
         cy.token().then(t => { token = t })
@@ -51,6 +52,14 @@ describe('Produtos', () => {
         })
     });
 
+    it('Deve inserir um produto novo - POST via AppActions', () => {
+        cy.cadastrarProdutos(token, produto2, preco, descricao, quantidade)
+            .should((response) => {
+                expect(response.status).to.eq(201);
+                cy.log(response.body.produtos)
+            })
+    });
+
     it('Deve validar mensagem de erro ao cadastrar produto repetido - POST', () => {
         cy.request({
             url: '/produtos',
@@ -73,7 +82,7 @@ describe('Produtos', () => {
     it('Deve alterar um produto cadastrado previamente - PUT', () => {
         cy.request({
             //url: '/produtos?nome=' + produto,
-            url: '/produtos',  
+            url: '/produtos',
             method: 'GET'
         }).then(response => {
             let id = response.body.produtos[2]._id

@@ -4,9 +4,10 @@ import usuarioSchema from '../../contracts/usuario.contract';
 var faker = require('faker');
 var nome = faker.name.findName()
 var email = faker.internet.email(nome)
+var email2 = faker.internet.email(nome)
 
-describe('Usuários - Testes da API ServeRest', () => {
-    
+describe('USUÁRIOS - Testes da API ServeRest', () => {
+
     before(() => {
         cy.cadastroUsuarioMaster()
     });
@@ -47,10 +48,18 @@ describe('Usuários - Testes da API ServeRest', () => {
             cy.log(response.body)
             expect(response.status).to.eq(201)
             expect(response.body.message).to.eql("Cadastro realizado com sucesso")
-            expect(response.body).to.have.property("_id")  
+            expect(response.body).to.have.property("_id")
         })
     });
 
+    it('Deve cadastrar usuário com sucesso - POST via AppActions', () => {
+        cy.cadastroUsuario("Fábio Araújo", email2, "teste", "false")
+            .should((response) => {
+                cy.log(response.body)
+                expect(response.status).to.eq(201)
+                expect(response.body.message).to.eql("Cadastro realizado com sucesso")
+            })
+    });
     it('Deve alterar o usuário cadastrado previamente - PUT', () => {
         cy.request({
             url: '/usuarios',
