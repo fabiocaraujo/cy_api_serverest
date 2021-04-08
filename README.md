@@ -1,4 +1,7 @@
 # Cypress - API - Serverest
+
+[![Badge ServeRest](https://img.shields.io/badge/API-ServeRest-green)](https://github.com/ServeRest/ServeRest/)
+
 ## Projeto de exemplo na API Serverest
 
 ### Serverest:
